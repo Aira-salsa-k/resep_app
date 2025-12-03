@@ -1,0 +1,86 @@
+
+@import "tailwindcss";
+/* Color palette variables */
+:root {
+  --primary-dark: #626F47;      /* Dark olive green */
+  --primary-medium: #A4B465;    /* Light olive green */
+  --primary-yellow: #FFCF50;    /* Warm yellow */
+  --primary-cream: #FEFAE0;     /* Cream */
+}
+
+/* Base styles for our color palette */
+.bg-primary-dark { background-color: var(--primary-dark); }
+.bg-primary-medium { background-color: var(--primary-medium); }
+.bg-primary-yellow { background-color: var(--primary-yellow); }
+.bg-primary-cream { background-color: var(--primary-cream); }
+
+.text-primary-dark { color: var(--primary-dark); }
+.text-primary-medium { color: var(--primary-medium); }
+.text-primary-yellow { color: var(--primary-yellow); }
+.text-primary-cream { color: var(--primary-cream); }
+
+.border-primary-dark { border-color: var(--primary-dark); }
+.border-primary-medium { border-color: var(--primary-medium); }
+.border-primary-yellow { border-color: var(--primary-yellow); }
+.border-primary-cream { border-color: var(--primary-cream); }
+
+/* Custom styles for recipe application */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--primary-cream);
+}
+
+/* Recipe card specific styles */
+.recipe-card {
+  transition: all 0.3s ease;
+  border: 1px solid #e5e7eb;
+}
+
+.recipe-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Line clamp utility for text truncation */
+.line-clamp-1 {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--primary-cream);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-medium);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+}
