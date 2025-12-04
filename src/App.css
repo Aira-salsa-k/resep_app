@@ -2,10 +2,14 @@
 @import "tailwindcss";
 /* Color palette variables */
 :root {
-  --primary-dark: #626F47;      /* Dark olive green */
-  --primary-medium: #A4B465;    /* Light olive green */
-  --primary-yellow: #FFCF50;    /* Warm yellow */
-  --primary-cream: #FEFAE0;     /* Cream */
+  /* --primary-dark: #626F47;      
+  --primary-medium: #A4B465;    
+  --primary-yellow: #FFCF50;    
+  --primary-cream: #FEFAE0;      */
+   --primary-dark: #1A1A1A;      /* Hitam */
+  --primary-medium: #3A5A92;    /* Soft navy blue */
+  --primary-yellow: #FF8A34;    /* Orange */
+  --primary-cream: #FDE4EA;
 }
 
 /* Base styles for our color palette */

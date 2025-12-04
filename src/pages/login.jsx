@@ -81,8 +81,12 @@
 // export default Login;
 import { useState } from 'react';
 import { useAuth } from '../lib/authContext';
+import { useNavigate } from "react-router-dom";
+
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const { signIn, signUp, signInWithGoogle } = useAuth();
 
   const [isRegister, setIsRegister] = useState(false);
@@ -94,14 +98,20 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setLoading(true); // mulai loading
+    setLoading(true);
 
     const fn = isRegister ? signUp : signIn;
     const { error } = await fn(email, password);
 
-    if (error) setError(error.message);
+    setLoading(false);
 
-    setLoading(false); // selesai loading
+    if (!error) {
+      // ⬅️ Jika sukses login langsung ke halaman utama
+      navigate("/");
+      return;
+    }
+
+    setError(error.message);
   };
 
   return (
@@ -146,7 +156,7 @@ const Login = () => {
         </form>
 
         <div className="mt-4">
-          <button
+          {/* <button
             onClick={signInWithGoogle}
             disabled={loading}
             className={`w-full border py-2 rounded-lg transition 
@@ -154,7 +164,7 @@ const Login = () => {
             `}
           >
             {loading ? "Tunggu..." : "Lanjutkan dengan Google"}
-          </button>
+          </button> */}
         </div>
 
         <p className="mt-4 text-center text-sm">

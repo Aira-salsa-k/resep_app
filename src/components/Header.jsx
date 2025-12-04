@@ -8,6 +8,7 @@ const Header = ({
   currentView, 
   searchTerm, 
   onSearchChange,
+  showViewToggle, 
   showSearch = true,
   showAddButton = true
 }) => {
@@ -61,13 +62,22 @@ const Header = ({
                 </button>
               )}
               
-              <button
-                onClick={onViewToggle}
-                className="bg-[#A4B465] text-white p-2 rounded-lg hover:bg-[#8da252] transition-colors"
-              >
-                {currentView === 'grid' ? <List className="w-4 h-4" /> : <Grid className="w-4 h-4" />}
-              </button>
-              
+             {showViewToggle && (
+                <button
+                  onClick={onViewToggle}
+                  className="bg-[#A4B465] text-white p-2 rounded-lg hover:bg-[#8da252] transition-colors"
+                >
+                  {currentView === 'grid' ? <List className="w-4 h-4" /> : <Grid className="w-4 h-4" />}
+                </button>
+              )}
+
+              {!user && (
+                <button  onClick={() => window.location.href = "/login"}
+                className="text-sm px-4 py-2 bg-orange-600 text-white rounded-lg shadow hover:bg-amber-700 transition-all">
+                  Login
+                </button>
+              )}
+
               {user && (
                 <button
                   onClick={handleSignOut}

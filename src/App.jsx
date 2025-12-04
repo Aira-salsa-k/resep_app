@@ -7,8 +7,10 @@ import RecipeForm from './components/RecipeForm';
 import FilterBar from './components/FilterBar';
 import { AuthProvider } from './lib/authContext';
 import Login from "./pages/login";
+import { useNavigate } from "react-router-dom";
 
 const AppContent = () => {
+  const navigate = useNavigate();
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -21,6 +23,10 @@ const AppContent = () => {
     selectedCookingMethod: ''
   });
   const { user, loading: authLoading } = useAuth();
+
+  const goToLogin = () => {
+  window.location.href = "/login";
+};
 
   // Fetch recipes
   const fetchRecipes = async () => {
@@ -131,11 +137,16 @@ const AppContent = () => {
   };
 
   // Fetch recipes when component mounts or when search term changes
+  // useEffect(() => {
+  //   if (user) {
+  //     fetchRecipes();
+  //   }
+  // }, [user, searchTerm,filters]);
+
   useEffect(() => {
-    if (user) {
-      fetchRecipes();
-    }
-  }, [user, searchTerm,filters]);
+  fetchRecipes();
+}, [user, searchTerm, filters]);
+
 
   // Handle search
   const handleSearch = (term) => {
@@ -161,16 +172,38 @@ const AppContent = () => {
   };
 
   // Handle adding new recipe
+  // const handleAddNew = () => {
+  //   setEditingRecipe(null);
+  //   setShowForm(true);
+  // };
+
+ 
   const handleAddNew = () => {
-    setEditingRecipe(null);
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
+    setSelectedRecipe(null);
     setShowForm(true);
   };
 
+
+
   // Handle editing recipe
-  const handleEdit = (recipe) => {
-    setEditingRecipe(recipe);
-    setShowForm(true);
-  };
+  // const handleEdit = (recipe) => {
+  //   setEditingRecipe(recipe);
+  //   setShowForm(true);
+  // };
+ const handleEdit = (recipe) => {
+  if (!user) {
+    goToLogin();
+    return;
+  }
+  setEditingRecipe(recipe);
+  setShowForm(true);
+};
+
 
   // Handle saving recipe (create or update)
   // const handleSave = async (recipeData) => {
@@ -207,20 +240,38 @@ const AppContent = () => {
 
 
   // Handle deleting recipe
-  const handleDelete = async (recipe) => {
-    if (window.confirm(`Yakin ingin menghapus resep "${recipe.title}"?`)) {
-      try {
-        const result = await deleteRecipe(recipe.id);
-        if (result.error) {
-          throw new Error(result.error.message || 'Gagal menghapus resep');
-        }
-        fetchRecipes(); // Refresh the list
-      } catch (err) {
-        console.error('Error deleting recipe:', err);
-        alert('Gagal menghapus resep: ' + err.message);
-      }
+  // const handleDelete = async (recipe) => {
+  //   if (window.confirm(`Yakin ingin menghapus resep "${recipe.title}"?`)) {
+  //     try {
+  //       const result = await deleteRecipe(recipe.id);
+  //       if (result.error) {
+  //         throw new Error(result.error.message || 'Gagal menghapus resep');
+  //       }
+  //       fetchRecipes(); // Refresh the list
+  //     } catch (err) {
+  //       console.error('Error deleting recipe:', err);
+  //       alert('Gagal menghapus resep: ' + err.message);
+  //     }
+  //   }
+  // };
+ const handleDelete = async (recipe) => {
+  if (!user) {
+    goToLogin();
+    return;
+  }
+
+  if (window.confirm(`Yakin ingin menghapus resep "${recipe.title}"?`)) {
+    try {
+      const result = await deleteRecipe(recipe.id);
+      if (result.error) throw new Error(result.error.message);
+      fetchRecipes();
+    } catch (err) {
+      console.error(err);
     }
-  };
+  }
+};
+
+
 
   // Handle form close
   const handleCloseForm = () => {
@@ -263,9 +314,11 @@ const AppContent = () => {
   //     </div>
   //   );
   // }
-  if (!user) {
-  return <Login />;
-}
+
+  // Show login screen if not authenticated
+  // if (!user) {
+  //   return <Login />;
+  // } 
 
   return (
     <div className="min-h-screen bg-[#FEFAE0]">
@@ -274,6 +327,7 @@ const AppContent = () => {
         onViewToggle={toggleViewMode}
         currentView={viewMode}
         showSearch={false}  
+        showViewToggle={false} 
       />
 
       <main className="container mx-auto px-4 py-6">
@@ -295,10 +349,12 @@ const AppContent = () => {
           <div className="flex justify-center items-center h-64">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#626F47]"></div>
           </div>
-        ) : recipes.length === 0 ? (
+        ) 
+        : recipes.length === 0 ? (
+          
           <div className="text-center py-12">
             <h2 className="text-xl font-semibold text-gray-600 mb-2">Belum ada resep</h2>
-            <p className="text-gray-500 mb-6">Tambahkan resep pertama Anda untuk memulai</p>
+            <p className="text-gray-500 mb-6">Login dan Tambahkan resep pertama Anda untuk memulai</p>
             <button
               onClick={handleAddNew}
               className="bg-[#626F47] text-white px-6 py-3 rounded-lg hover:bg-[#4d5938] transition-colors"
@@ -308,7 +364,9 @@ const AppContent = () => {
           </div>
         ) : (
           <>
-            <div className={`${viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6' : 'space-y-4'}`}>
+            <div className={`${viewMode === 'grid'
+      ? 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5 xs:m-8 lg:gap-4 px-3'
+      : 'space-y-4 px-3'}`}>
               {recipes.map(recipe => (
                 <RecipeCard
                   key={recipe.id}
@@ -322,7 +380,7 @@ const AppContent = () => {
           </>
         )}
       </main>
-
+        
       {showForm && (
         <RecipeForm
           recipe={editingRecipe}
@@ -330,6 +388,8 @@ const AppContent = () => {
           onCancel={handleCloseForm}
         />
       )}
+
+  
     </div>
   );
 };
@@ -341,5 +401,6 @@ function App() {
    
   );
 }
+
 
 export default App;
