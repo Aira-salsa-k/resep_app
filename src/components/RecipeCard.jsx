@@ -257,13 +257,15 @@ const RecipeCard = ({ recipe, onEdit, onDelete, viewMode = 'grid' }) => {
 
   // Determine thumbnail URL
   const thumbnailUrl = recipe.thumbnail_url || '/placeholder-recipe.jpg';
+// Manual flag
+const isManual = recipe.is_manual;
 
   // Modal for detailed view
   const renderModal = () => {
     if (!showModal) return null;
 
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4" onClick={closeModal}>
+      <div className="fixed inset-0 bg-black/67 z-50 flex items-center justify-center p-4" onClick={closeModal}>
         <div 
           className="bg-white rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto"
           onClick={(e) => e.stopPropagation()}
@@ -291,26 +293,27 @@ const RecipeCard = ({ recipe, onEdit, onDelete, viewMode = 'grid' }) => {
               />
             </div> */}
             {/* Thumbnail */}
-              <div className="aspect-video mb-6 flex items-center justify-center bg-white rounded-lg border relative">
+            <div className="aspect-video mb-6 flex items-center justify-center bg-white rounded-lg border relative">
 
-                {isManual ? (
-                  <div className="flex flex-col items-center justify-center text-gray-400">
-                    <CookingPot className="w-16 h-16 mb-2" />
-                    <p className="text-sm">Tidak ada foto — Mode Manual</p>
-                  </div>
-                ) : (
-                  <img
-                    src={thumbnailUrl}
-                    alt={recipe.title}
-                    className="w-full h-full object-cover rounded-lg"
-                    onError={(e) => {
-                      console.log("Gambar gagal dimuat, menggunakan default");
-                      e.target.src = DEFAULT_MANUAL_IMAGE;
-                    }}
-                  />
-                )}
-
+            {isManual ? (
+              <div className="flex flex-col items-center justify-center text-gray-400">
+                <CookingPot className="w-16 h-16 mb-2" />
+                <p className="text-sm">Tidak ada foto — Mode Manual</p>
               </div>
+            ) : (
+              <img
+                src={thumbnailUrl}
+                alt={recipe.title}
+                className="w-full h-full object-cover rounded-lg"
+                onError={(e) => {
+                  console.log("Gambar gagal dimuat, menggunakan default");
+                  e.target.src = DEFAULT_MANUAL_IMAGE;
+                }}
+              />
+            )}
+
+          </div>
+
             
             {/* Metadata */}
             <div className="flex flex-wrap gap-4 mb-6">
@@ -377,7 +380,7 @@ const RecipeCard = ({ recipe, onEdit, onDelete, viewMode = 'grid' }) => {
                   href={recipe.original_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-[#626F47] text-white rounded-md hover:bg-[#4d5938]"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-[#171717] text-white rounded-md hover:bg-[#585858]"
                 >
                   Kunjungi Sumber Resep
                   <ExternalLink className="w-4 h-4" />
@@ -520,7 +523,7 @@ const RecipeCard = ({ recipe, onEdit, onDelete, viewMode = 'grid' }) => {
         <div className="p-4 flex flex-col flex-1">
           <div className="flex flex-wrap gap-2 mb-3">
             {recipe.ingredient_category && (
-              <span className="bg-[#faa0ac] text-black px-2 py-1 rounded-full text-xs">
+              <span className="bg-[#ffc3e1] text-black px-2 py-1 rounded-full text-xs">
                 {recipe.ingredient_category}
               </span>
             )}

@@ -359,7 +359,7 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+    <div className="fixed inset-0 bg-black/67 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center p-4 border-b">
           <h2 className="text-xl font-semibold">
@@ -651,7 +651,7 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-[#626F47] text-white rounded-md hover:bg-[#4d5938] flex items-center gap-2"
+              className="px-4 py-2 bg-[#202020] text-white rounded-md hover:bg-[#313131] flex items-center gap-2"
             >
               <Upload className="w-4 h-4" />
               {isEditing ? 'Update' : 'Simpan'} Resep

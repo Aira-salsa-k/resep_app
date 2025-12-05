@@ -973,7 +973,7 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-[#626F47] text-white rounded-md hover:bg-[#4d5938] flex items-center gap-2"
+              className="px-4 py-2 bg-[#1e1e1e] text-white rounded-md hover:bg-[#232323] flex items-center gap-2"
             >
               <Upload className="w-4 h-4" />
               {isEditing ? 'Update' : 'Simpan'} Resep
