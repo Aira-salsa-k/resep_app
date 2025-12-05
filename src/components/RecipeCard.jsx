@@ -218,7 +218,7 @@
 // export default RecipeCard;
 
 import React, { useState } from 'react';
-import { Clock, User, Edit3, Trash2, ExternalLink, ChevronDown, X } from 'lucide-react';
+import { Clock, User, Edit3, Trash2, ExternalLink, ChevronDown, X , CookingPot} from 'lucide-react';
 import { useAuth } from '../lib/authContext';
 
 const RecipeCard = ({ recipe, onEdit, onDelete, viewMode = 'grid' }) => {
@@ -280,7 +280,7 @@ const RecipeCard = ({ recipe, onEdit, onDelete, viewMode = 'grid' }) => {
           
           <div className="p-6">
             {/* Thumbnail */}
-            <div className="aspect-video mb-6">
+            {/* <div className="aspect-video mb-6">
               <img
                 src={thumbnailUrl}
                 alt={recipe.title}
@@ -289,7 +289,28 @@ const RecipeCard = ({ recipe, onEdit, onDelete, viewMode = 'grid' }) => {
                   e.target.src = '/placeholder-recipe.jpg';
                 }}
               />
-            </div>
+            </div> */}
+            {/* Thumbnail */}
+              <div className="aspect-video mb-6 flex items-center justify-center bg-white rounded-lg border relative">
+
+                {isManual ? (
+                  <div className="flex flex-col items-center justify-center text-gray-400">
+                    <CookingPot className="w-16 h-16 mb-2" />
+                    <p className="text-sm">Tidak ada foto — Mode Manual</p>
+                  </div>
+                ) : (
+                  <img
+                    src={thumbnailUrl}
+                    alt={recipe.title}
+                    className="w-full h-full object-cover rounded-lg"
+                    onError={(e) => {
+                      console.log("Gambar gagal dimuat, menggunakan default");
+                      e.target.src = DEFAULT_MANUAL_IMAGE;
+                    }}
+                  />
+                )}
+
+              </div>
             
             {/* Metadata */}
             <div className="flex flex-wrap gap-4 mb-6">
@@ -302,7 +323,7 @@ const RecipeCard = ({ recipe, onEdit, onDelete, viewMode = 'grid' }) => {
                 <span>Anda</span>
               </div>
               {recipe.ingredient_category && (
-                <span className="bg-[#A4B465] text-white px-3 py-1 rounded-full text-sm">
+                <span className="bg-[#df7fc1] text-black px-3 py-1 rounded-full text-sm">
                   {recipe.ingredient_category}
                 </span>
               )}
@@ -412,7 +433,7 @@ const RecipeCard = ({ recipe, onEdit, onDelete, viewMode = 'grid' }) => {
                 
                 <div className="flex flex-wrap gap-2 mb-2">
                   {recipe.ingredient_category && (
-                    <span className="bg-[#A4B465] text-white px-2 py-1 rounded-full text-xs">
+                    <span className="bg-[#d871c7] text-black px-2 py-1 rounded-full text-xs">
                       {recipe.ingredient_category}
                     </span>
                   )}
@@ -499,12 +520,12 @@ const RecipeCard = ({ recipe, onEdit, onDelete, viewMode = 'grid' }) => {
         <div className="p-4 flex flex-col flex-1">
           <div className="flex flex-wrap gap-2 mb-3">
             {recipe.ingredient_category && (
-              <span className="bg-[#A4B465] text-white px-2 py-1 rounded-full text-xs">
+              <span className="bg-[#faa0ac] text-black px-2 py-1 rounded-full text-xs">
                 {recipe.ingredient_category}
               </span>
             )}
             {recipe.cooking_method && (
-              <span className="bg-[#FFCF50] text-[#626F47] px-2 py-1 rounded-full text-xs">
+              <span className="bg-[#FFCF50] text-[#2c2c2c] px-2 py-1 rounded-full text-xs">
                 {recipe.cooking_method}
               </span>
             )}
@@ -528,7 +549,7 @@ const RecipeCard = ({ recipe, onEdit, onDelete, viewMode = 'grid' }) => {
             {/* Tombol kiri (besar) */}
             <button
               onClick={openModal}
-              className="flex-1 py-2 text-[#626F47] hover:text-[#A4B465] font-medium flex items-center justify-center gap-1 border border-[#A4B465] rounded-md hover:bg-[#A4B465]/10"
+              className="flex-1 py-2 text-[#191919] hover:text-[#3f3f3f] font-medium flex items-center justify-center gap-1 border border-[#333333] rounded-md hover:bg-[#A4B465]/10"
             >
               <ChevronDown className="w-4 h-4" />
               Baca Selengkapnya
@@ -540,7 +561,7 @@ const RecipeCard = ({ recipe, onEdit, onDelete, viewMode = 'grid' }) => {
                 href={recipe.original_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 bg-[#626F47] text-white rounded-md hover:bg-[#4d5938] flex items-center justify-center"
+                className="p-2 bg-[#434343] text-white rounded-md hover:bg-[#4d5938] flex items-center justify-center"
                 onClick={(e) => e.stopPropagation()}
               >
                 <ExternalLink className="w-4 h-4" />

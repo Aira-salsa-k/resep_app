@@ -178,15 +178,27 @@ const AppContent = () => {
   // };
 
  
-  const handleAddNew = () => {
-    if (!user) {
-      navigate("/login");
-      return;
-    }
+  // const handleAddNew = () => {
+  //   if (!user) {
+  //     navigate("/login");
+  //     return;
+  //   }
 
-    setSelectedRecipe(null);
-    setShowForm(true);
-  };
+  //   setSelectedRecipe(null);
+  //   setShowForm(true);
+  // };
+const handleAddNew = () => {
+  if (!user || !user.id) {
+    navigate("/login");
+    return;
+  }
+
+  setEditingRecipe(null);
+  setShowForm(true);
+  console.log("USER:", user);
+
+};
+
 
 
 
@@ -282,7 +294,7 @@ const AppContent = () => {
   // Show loading state while waiting for auth
   if (authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#FEFAE0]">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#626F47] mx-auto"></div>
           <p className="mt-4 text-[#626F47]">Memuat aplikasi...</p>
@@ -321,7 +333,7 @@ const AppContent = () => {
   // } 
 
   return (
-    <div className="min-h-screen bg-[#FEFAE0]">
+    <div className="min-h-screen bg-[#f9cbfa]">
       <Header
         onAddNew={handleAddNew}
         onViewToggle={toggleViewMode}
@@ -357,7 +369,7 @@ const AppContent = () => {
             <p className="text-gray-500 mb-6">Login dan Tambahkan resep pertama Anda untuk memulai</p>
             <button
               onClick={handleAddNew}
-              className="bg-[#626F47] text-white px-6 py-3 rounded-lg hover:bg-[#4d5938] transition-colors"
+              className="bg-[#ffa149] text-black px-6 py-3 rounded-lg hover:bg-[#ba7d3c] transition-colors"
             >
               Tambah Resep
             </button>

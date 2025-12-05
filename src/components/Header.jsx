@@ -19,13 +19,21 @@ const Header = ({
   };
 
   return (
-    <header className="bg-[#626F47] text-white shadow-md">
+    <header className="bg-[#f8f8f8] text-white shadow-md">
       <div className="container mx-auto px-4 py-3">
         <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-2">
+
+              {/* === LOGO BULAT === */}
+        <img 
+          src="/logo_hat.png"   // ganti dengan path gambarmu
+          alt="logo"
+          className="w-10 h-10 rounded-full object-cover"
+        />
+
             <div className="flex flex-col">
-            <h1 className="text-xl font-bold">Cook Notes</h1>
-            <h3 className="text-sm text-white -mt-1">
+            <h1 className="text-xl text-black font-bold">Cook Notes</h1>
+            <h3 className="text-sm text-black -mt-1">
               your recipe collection
             </h3>
           </div>
@@ -55,7 +63,7 @@ const Header = ({
               {showAddButton && (
                 <button
                   onClick={onAddNew}
-                  className="flex items-center gap-1 bg-[#FFCF50] text-[#626F47] px-3 py-2 rounded-lg hover:bg-[#feebc8] transition-colors"
+                  className="flex items-center gap-1 bg-[#fb953d] text-[#181818] px-3 py-2 rounded-lg hover:bg-[#feebc8] transition-colors"
                 >
                   <Plus className="w-4 h-4" />
                   <span className="hidden sm:inline">Tambah Resep</span>
@@ -73,7 +81,7 @@ const Header = ({
 
               {!user && (
                 <button  onClick={() => window.location.href = "/login"}
-                className="text-sm px-4 py-2 bg-orange-600 text-white rounded-lg shadow hover:bg-amber-700 transition-all">
+                className="text-sm px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-amber-700 transition-all">
                   Login
                 </button>
               )}
