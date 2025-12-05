@@ -89,7 +89,7 @@ const Header = ({
               {user && (
                 <button
                   onClick={handleSignOut}
-                  className="flex items-center gap-1 bg-red-600 text-white px-3 py-2 rounded-lg hover:bg-red-700 transition-colors"
+                  className="flex items-center gap-1 bg-black-600 text-white px-3 py-2 rounded-lg hover:bg-black-700 transition-colors"
                 >
                   <LogOut className="w-4 h-4" />
                   <span className="hidden sm:inline">Keluar</span>
