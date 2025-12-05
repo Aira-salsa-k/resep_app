@@ -328,7 +328,7 @@ const RecipeCard = ({ recipe, onEdit, onDelete, viewMode = 'grid' }) => {
                 </span>
               )}
               {recipe.cooking_method && (
-                <span className="bg-[#FFCF50] text-[#626F47] px-3 py-1 rounded-full text-sm">
+                <span className="bg-[#151515] text-[#f7f7f7] px-3 py-1 rounded-full text-sm">
                   {recipe.cooking_method}
                 </span>
               )}
@@ -438,7 +438,7 @@ const RecipeCard = ({ recipe, onEdit, onDelete, viewMode = 'grid' }) => {
                     </span>
                   )}
                   {recipe.cooking_method && (
-                    <span className="bg-[#FFCF50] text-[#626F47] px-2 py-1 rounded-full text-xs">
+                    <span className="bg-[#1c1c1c] text-[#dddddd] px-2 py-1 rounded-full text-xs">
                       {recipe.cooking_method}
                     </span>
                   )}
@@ -525,7 +525,7 @@ const RecipeCard = ({ recipe, onEdit, onDelete, viewMode = 'grid' }) => {
               </span>
             )}
             {recipe.cooking_method && (
-              <span className="bg-[#FFCF50] text-[#2c2c2c] px-2 py-1 rounded-full text-xs">
+              <span className="bg-[#1d1d1d] text-[#fdfdfd] px-2 py-1 rounded-full text-xs">
                 {recipe.cooking_method}
               </span>
             )}
