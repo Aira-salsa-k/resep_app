@@ -79,12 +79,12 @@ const Header = ({
                 </button>
               )}
 
-              {!user && (
+              {/* {!user && (
                 <button  onClick={() => window.location.href = "/login"}
                 className="text-sm px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-amber-700 transition-all">
                   Login
                 </button>
-              )}
+              )} */}
 
               {user && (
                 <button
