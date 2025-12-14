@@ -148,29 +148,59 @@ export const AuthProvider = ({ children }) => {
 
 const resetPassword = async (email) => {
   try {
-    // Gunakan URL yang benar - langsung ke reset-password
-    const redirectUrl = `${window.location.origin}/reset-password`;
+    // Pastikan menggunakan origin yang benar
+    const origin = window.location.origin;
+    const redirectUrl = `${origin}/auth/callback`;
     
     console.log('🔐 Requesting reset password for:', email);
     console.log('🔗 Redirect URL:', redirectUrl);
+    console.log('🏠 Origin:', origin);
     
     const { data, error } = await supabase.auth.resetPasswordForEmail(
       email, 
       {
         redirectTo: redirectUrl,
+        // Tambahkan captcha token jika diperlukan
+        // captchaToken: 'optional-captcha-token'
       }
     );
 
     if (error) {
       console.error('❌ Reset password error:', error);
+      
+      // Tangani error spesifik
+      if (error.message.includes('rate limit')) {
+        throw new Error('Terlalu banyak permintaan. Coba lagi nanti.');
+      }
+      if (error.message.includes('email not found')) {
+        throw new Error('Email tidak terdaftar.');
+      }
+      
       throw error;
     }
     
-    console.log('✅ Reset password email sent');
-    return { data, error: null };
+    console.log('✅ Reset password email sent successfully');
+    
+    // Return informasi tambahan
+    return { 
+      data: { 
+        ...data,
+        message: 'Email reset password telah dikirim. Cek inbox atau spam folder Anda.',
+        emailSent: true
+      }, 
+      error: null 
+    };
   } catch (error) {
     console.error('❌ Reset password catch error:', error);
-    return { data: null, error };
+    return { 
+      data: null, 
+      error: {
+        message: error.message,
+        userFriendly: error.message.includes('rate limit') 
+          ? 'Terlalu banyak permintaan. Coba lagi dalam beberapa menit.'
+          : 'Gagal mengirim email reset. Pastikan email benar dan coba lagi.'
+      }
+    };
   }
 };
 
