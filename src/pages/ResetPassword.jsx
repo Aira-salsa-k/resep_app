@@ -31,6 +31,7 @@ const ResetPassword = () => {
 
   useEffect(() => {
     const initialize = async () => {
+        
       try {
         const { accessToken, refreshToken, type, error, errorCode } = parseHashParams();
         

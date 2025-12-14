@@ -177,7 +177,7 @@ const resetPassword = async (email) => {
   try {
     // Pastikan menggunakan origin yang benar
     const origin = window.location.origin;
-    const redirectUrl = `${origin}/auth/callback`;
+   const redirectUrl = `${window.location.origin}/reset-password`;
     
     console.log('🔐 Requesting reset password for:', email);
     console.log('🔗 Redirect URL:', redirectUrl);
