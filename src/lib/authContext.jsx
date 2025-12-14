@@ -146,18 +146,33 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const resetPassword = async (email) => {
-    try {
-      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
-      });
+const resetPassword = async (email) => {
+  try {
+    // Gunakan URL yang benar - langsung ke reset-password
+    const redirectUrl = `${window.location.origin}/reset-password`;
+    
+    console.log('🔐 Requesting reset password for:', email);
+    console.log('🔗 Redirect URL:', redirectUrl);
+    
+    const { data, error } = await supabase.auth.resetPasswordForEmail(
+      email, 
+      {
+        redirectTo: redirectUrl,
+      }
+    );
 
-      if (error) throw error;
-      return { data, error: null };
-    } catch (error) {
-      return { data: null, error };
+    if (error) {
+      console.error('❌ Reset password error:', error);
+      throw error;
     }
-  };
+    
+    console.log('✅ Reset password email sent');
+    return { data, error: null };
+  } catch (error) {
+    console.error('❌ Reset password catch error:', error);
+    return { data: null, error };
+  }
+};
 
   const signOut = async () => {
     await supabase.auth.signOut();
