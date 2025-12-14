@@ -31,6 +31,7 @@ import App from './App.jsx'
 import Login from './pages/login.jsx'
 import { AuthProvider } from './lib/authContext.jsx'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import ResetPassword from './pages/ResetPassword.jsx';
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -39,6 +40,7 @@ createRoot(document.getElementById('root')).render(
         <Routes>
           <Route path="/" element={<App />} />
           <Route path="/login" element={<Login />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
