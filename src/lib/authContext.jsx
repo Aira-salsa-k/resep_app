@@ -97,24 +97,51 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const signUp = async (email, password) => {
-    try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-          
-        },
-      });
+  try {
+    console.log('📝 Signup attempt for:', email);
+    
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        // GANTI INI: arahkan ke /auth/confirm untuk email verification
+        emailRedirectTo: `${window.location.origin}/auth/confirm`,
+        
+        // Optional: tambahkan metadata
+        data: {
+          signup_method: 'email_password',
+          signup_time: new Date().toISOString()
+        }
+      },
+    });
 
-      if (error) throw error;
+    if (error) {
+      console.error('❌ Signup error:', error);
       
-      // Email verifikasi dikirim otomatis
-      return { data, error: null };
-    } catch (error) {
-      return { data: null, error };
+      // Tangani error spesifik
+      if (error.message.includes('User already registered')) {
+        throw new Error('Email sudah terdaftar.');
+      }
+      throw error;
     }
-  };
+    
+    console.log('✅ Signup successful:', data);
+    
+    return { 
+      data: { 
+        ...data,
+        user: data.user,
+        message: data.user?.identities?.length === 0 
+          ? 'Pendaftaran berhasil! Silakan cek email untuk verifikasi.'
+          : 'Pendaftaran berhasil!'
+      }, 
+      error: null 
+    };
+  } catch (error) {
+    console.error('❌ Signup catch error:', error);
+    return { data: null, error };
+  }
+};
 
   const signIn = async (email, password) => {
     try {

@@ -85,6 +85,7 @@ import { AuthProvider } from './lib/authContext.jsx'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import ResetPassword from './pages/ResetPassword.jsx'
 import AuthCallback from './pages/AuthCallback.jsx'
+import AuthConfirm from './pages/AuthConfirm';
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -100,7 +101,8 @@ createRoot(document.getElementById('root')).render(
           
           {/* ✅ Alternatif routes untuk kompatibilitas */}
           <Route path="/auth/verify" element={<AuthCallback />} />
-          <Route path="/auth/confirm" element={<AuthCallback />} />
+          <Route path="/auth/confirm" element={<AuthConfirm />} />
+          
         </Routes>
       </BrowserRouter>
     </AuthProvider>
