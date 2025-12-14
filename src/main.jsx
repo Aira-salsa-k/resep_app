@@ -32,6 +32,7 @@ import Login from './pages/login.jsx'
 import { AuthProvider } from './lib/authContext.jsx'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import ResetPassword from './pages/ResetPassword.jsx';
+import AuthCallback from './pages/AuthCallback.jsx';
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -41,6 +42,8 @@ createRoot(document.getElementById('root')).render(
           <Route path="/" element={<App />} />
           <Route path="/login" element={<Login />} />
             <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/auth/callback" element={<AuthCallback />} />
+
         </Routes>
       </BrowserRouter>
     </AuthProvider>
