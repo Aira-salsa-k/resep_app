@@ -60,7 +60,7 @@ const ResetPassword = () => {
       // Logout setelah reset
       setTimeout(() => {
         supabase.auth.signOut().then(() => {
-          navigate('/login', { 
+          navigate('/', { 
             state: { message: 'Password berhasil diubah! Silakan login.' } 
           });
         });
