@@ -1,7 +1,8 @@
+// ResetPassword.jsx - HANYA cek session & update password
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
-import { Key, Eye, EyeOff, Lock, CheckCircle, AlertTriangle, ArrowLeft, RefreshCw } from 'lucide-react';
+import { Key, Eye, EyeOff, Lock, CheckCircle } from 'lucide-react';
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -11,111 +12,28 @@ const ResetPassword = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-  const [canReset, setCanReset] = useState(false);
-  const [isChecking, setIsChecking] = useState(true);
+  const [hasSession, setHasSession] = useState(false);
 
-  // Fungsi untuk parse hash dari URL
-  const parseHashParams = () => {
-    const hash = window.location.hash.substring(1);
-    const params = new URLSearchParams(hash);
-    
-    return {
-      accessToken: params.get('access_token'),
-      refreshToken: params.get('refresh_token'),
-      type: params.get('type'),
-      error: params.get('error'),
-      errorCode: params.get('error_code'),
-      errorDesc: params.get('error_description')
-    };
-  };
-
+  // 🎯 SANGAT SIMPLE: Cek session aja
   useEffect(() => {
-    const initialize = async () => {
-        
-      try {
-        const { accessToken, refreshToken, type, error, errorCode } = parseHashParams();
-        
-        console.log('🔍 URL Parameters:', { 
-          hasToken: !!accessToken, 
-          type, 
-          error, 
-          errorCode 
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        console.log('✅ User session found');
+        setHasSession(true);
+      } else {
+        console.log('❌ No session, redirecting to login');
+        navigate('/login', { 
+          state: { error: 'Sesi tidak valid. Silakan minta link reset baru.' }
         });
-        
-        // 🚨 CEK 1: Jika ada error di URL
-        if (error === 'access_denied' && errorCode === 'otp_expired') {
-          setError('Link reset password sudah kedaluwarsa atau tidak valid. Silakan request link baru.');
-          setCanReset(false);
-          setIsChecking(false);
-          
-          // Bersihkan URL hash
-          window.history.replaceState(null, '', window.location.pathname);
-          return;
-        }
-        
-        // 🟢 CEK 2: Jika ada token recovery di URL
-        if (accessToken && type === 'recovery') {
-          console.log('🔄 Menemukan token recovery, mengatur session...');
-          
-          const { error: sessionError } = await supabase.auth.setSession({
-            access_token: accessToken,
-            refresh_token: refreshToken || ''
-          });
-          
-          if (sessionError) {
-            console.error('❌ Gagal mengatur session:', sessionError);
-            setError('Token tidak valid. Silakan minta link baru.');
-            setCanReset(false);
-          } else {
-            console.log('✅ Session berhasil diatur');
-            setCanReset(true);
-          }
-          
-          setIsChecking(false);
-          return;
-        }
-        
-        // 🔵 CEK 3: Cek session yang sudah ada
-        const { data: { session } } = await supabase.auth.getSession();
-        
-        if (session?.user) {
-          console.log('✅ Session aktif ditemukan');
-          setCanReset(true);
-        } else {
-          console.log('❌ Tidak ada session aktif');
-          setError('Link reset password tidak valid. Silakan minta link baru.');
-          setCanReset(false);
-        }
-        
-        setIsChecking(false);
-        
-      } catch (err) {
-        console.error('❌ Error saat inisialisasi:', err);
-        setError('Terjadi kesalahan. Silakan coba lagi.');
-        setCanReset(false);
-        setIsChecking(false);
-      }
-    };
-
-    initialize();
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log('Auth event:', event);
-      if (event === 'PASSWORD_RECOVERY') {
-        setCanReset(true);
-        setIsChecking(false);
       }
     });
-
-    return () => subscription.unsubscribe();
-  }, []);
+  }, [navigate]);
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
     
-    if (!canReset) {
-      setError('Anda tidak dapat mereset password. Silakan minta link baru.');
+    if (!hasSession) {
+      setError('Sesi tidak valid.');
       return;
     }
 
@@ -139,11 +57,14 @@ const ResetPassword = () => {
 
       setSuccess(true);
       
+      // Logout setelah reset
       setTimeout(() => {
-        navigate('/login', { 
-          state: { message: 'Password berhasil diubah! Silakan login.' } 
+        supabase.auth.signOut().then(() => {
+          navigate('/login', { 
+            state: { message: 'Password berhasil diubah! Silakan login.' } 
+          });
         });
-      }, 3000);
+      }, 2000);
       
     } catch (err) {
       console.error('Reset error:', err);
@@ -153,66 +74,10 @@ const ResetPassword = () => {
     }
   };
 
-  const handleRequestNewLink = () => {
-    navigate('/login', { 
-      state: { 
-        showForgotPassword: true,
-        message: 'Silakan masukkan email untuk mendapatkan link reset baru.'
-      }
-    });
-  };
-
-  // Tampilan loading
-  if (isChecking) {
-    return (
-      <div className="min-h-screen bg-[#ffd4fe] flex items-center justify-center p-4">
-        <div className="text-center">
-          <div className="w-12 h-12 border-4 border-black/20 border-t-black rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-black">Memverifikasi tautan...</p>
-        </div>
-      </div>
-    );
+  if (!hasSession) {
+    return null; // Akan redirect di useEffect
   }
 
-  // Tampilan error (link expired)
-  if (!canReset && !success) {
-    return (
-      <div className="min-h-screen bg-[#ffd4fe] flex items-center justify-center p-4">
-        <div className="bg-white/20 backdrop-blur p-8 rounded-2xl max-w-md w-full border border-white/30">
-          <div className="text-center">
-            <AlertTriangle className="w-16 h-16 mx-auto text-red-600 mb-4" />
-            <h1 className="text-2xl font-bold text-black mb-3">Link Tidak Valid</h1>
-            
-            <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-4 mb-6">
-              <p className="text-black/80">{error}</p>
-              <p className="text-black/60 text-sm mt-2">
-                Link reset password hanya berlaku untuk waktu terbatas.
-              </p>
-            </div>
-
-            <div className="space-y-3">
-              <button
-                onClick={handleRequestNewLink}
-                className="w-full flex items-center justify-center gap-2 bg-black text-white py-3 rounded-xl hover:bg-black/80 transition"
-              >
-                <RefreshCw className="w-5 h-5" />
-                Minta Link Baru
-              </button>
-              
-              <button
-                onClick={() => navigate('/login')}
-                className="w-full border border-black/20 text-black py-3 rounded-xl hover:bg-black/5 transition"
-              >
-                Kembali ke Login
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Tampilan form reset password
   return (
     <div className="min-h-screen bg-[#ffd4fe] flex items-center justify-center p-4">
       <div className="bg-white/20 backdrop-blur p-8 rounded-2xl max-w-md w-full border border-white/30">
@@ -237,6 +102,12 @@ const ResetPassword = () => {
           </div>
         ) : (
           <form onSubmit={handleResetPassword} className="space-y-4">
+            {error && (
+              <div className="bg-red-500/10 text-red-700 p-3 rounded-xl text-sm text-center">
+                {error}
+              </div>
+            )}
+
             <div className="relative">
               <Key className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-black/70" />
               <input

@@ -173,61 +173,30 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+// authContext.js - resetPassword function
 const resetPassword = async (email) => {
   try {
-    // Pastikan menggunakan origin yang benar
-    const origin = window.location.origin;
-   const redirectUrl = `${window.location.origin}/reset-password`;
+    // 🎯 PASTIKAN INI: redirect ke /auth/callback
+    const redirectUrl = `${window.location.origin}/auth/callback`;
     
-    console.log('🔐 Requesting reset password for:', email);
-    console.log('🔗 Redirect URL:', redirectUrl);
-    console.log('🏠 Origin:', origin);
+    console.log('📧 Sending reset email to:', email);
+    console.log('🔗 Redirect to:', redirectUrl);
     
-    const { data, error } = await supabase.auth.resetPasswordForEmail(
-      email, 
-      {
-        redirectTo: redirectUrl,
-        // Tambahkan captcha token jika diperlukan
-        // captchaToken: 'optional-captcha-token'
-      }
-    );
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: redirectUrl
+    });
 
-    if (error) {
-      console.error('❌ Reset password error:', error);
-      
-      // Tangani error spesifik
-      if (error.message.includes('rate limit')) {
-        throw new Error('Terlalu banyak permintaan. Coba lagi nanti.');
-      }
-      if (error.message.includes('email not found')) {
-        throw new Error('Email tidak terdaftar.');
-      }
-      
-      throw error;
-    }
+    if (error) throw error;
     
-    console.log('✅ Reset password email sent successfully');
-    
-    // Return informasi tambahan
     return { 
       data: { 
-        ...data,
-        message: 'Email reset password telah dikirim. Cek inbox atau spam folder Anda.',
+        message: 'Email reset password telah dikirim. Cek inbox Anda.',
         emailSent: true
       }, 
       error: null 
     };
   } catch (error) {
-    console.error('❌ Reset password catch error:', error);
-    return { 
-      data: null, 
-      error: {
-        message: error.message,
-        userFriendly: error.message.includes('rate limit') 
-          ? 'Terlalu banyak permintaan. Coba lagi dalam beberapa menit.'
-          : 'Gagal mengirim email reset. Pastikan email benar dan coba lagi.'
-      }
-    };
+    return { data: null, error };
   }
 };
 

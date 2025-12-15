@@ -76,6 +76,40 @@
 //   </React.StrictMode>
 // )
 
+// import React from 'react'
+// import { createRoot } from 'react-dom/client'
+// import './index.css'
+// import App from './App.jsx'
+// import Login from './pages/login.jsx'
+// import { AuthProvider } from './lib/authContext.jsx'
+// import { BrowserRouter, Routes, Route } from 'react-router-dom'
+// import ResetPassword from './pages/ResetPassword.jsx'
+// import AuthCallback from './pages/AuthCallback.jsx'
+// import AuthConfirm from './pages/EmailVerify.jsx';
+
+// createRoot(document.getElementById('root')).render(
+//   <React.StrictMode>
+//     <AuthProvider>
+//       <BrowserRouter>
+//         <Routes>
+//           <Route path="/" element={<App />} />
+//           <Route path="/login" element={<Login />} />
+//           <Route path="/reset-password" element={<ResetPassword />} />
+          
+//           {/* ✅ INI YANG PENTING: handler untuk auth callback */}
+//           <Route path="/auth/callback" element={<AuthCallback />} />
+          
+//           {/* ✅ Alternatif routes untuk kompatibilitas */}
+//           <Route path="/auth/verify" element={<AuthCallback />} />
+//           <Route path="/auth/confirm" element={<AuthConfirm />} />
+          
+//         </Routes>
+//       </BrowserRouter>
+//     </AuthProvider>
+//   </React.StrictMode>
+// )
+
+// index.jsx - router
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
@@ -85,7 +119,6 @@ import { AuthProvider } from './lib/authContext.jsx'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import ResetPassword from './pages/ResetPassword.jsx'
 import AuthCallback from './pages/AuthCallback.jsx'
-import AuthConfirm from './pages/AuthConfirm';
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -95,14 +128,8 @@ createRoot(document.getElementById('root')).render(
           <Route path="/" element={<App />} />
           <Route path="/login" element={<Login />} />
           <Route path="/reset-password" element={<ResetPassword />} />
-          
-          {/* ✅ INI YANG PENTING: handler untuk auth callback */}
+          {/* 🎯 HANYA INI YANG DIPERLUKAN */}
           <Route path="/auth/callback" element={<AuthCallback />} />
-          
-          {/* ✅ Alternatif routes untuk kompatibilitas */}
-          <Route path="/auth/verify" element={<AuthCallback />} />
-          <Route path="/auth/confirm" element={<AuthConfirm />} />
-          
         </Routes>
       </BrowserRouter>
     </AuthProvider>
